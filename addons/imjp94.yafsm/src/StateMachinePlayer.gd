@@ -342,6 +342,14 @@ func get_previous():
 	var v = super.get_previous()
 	return v if v else ""
 
+func current_state_has_transition_condition(condition_name):
+	var current_transitions : Dictionary = state_machine.transitions[get_current()]
+	for transition in current_transitions.values():
+		var conditions : Dictionary = transition.conditions
+		if conditions.has(condition_name):
+			return true
+	return false
+
 # Convert node path to state path that can be used to query state with StateMachine.get_state.
 # Node path, "root/path/to/state", equals to State path, "path/to/state"
 static func node_path_to_state_path(node_path):
