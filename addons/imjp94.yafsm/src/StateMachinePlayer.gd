@@ -342,6 +342,7 @@ func get_previous():
 	var v = super.get_previous()
 	return v if v else ""
 
+
 func current_state_has_transition_condition(condition_name):
 	var current_transitions : Dictionary = state_machine.transitions[get_current()]
 	for transition in current_transitions.values():
@@ -350,6 +351,22 @@ func current_state_has_transition_condition(condition_name):
 			return true
 	return false
 
+func has_transition_trigger(state_name, trigger_name):
+	var transitions : Dictionary = state_machine.transitions[state_name]
+	for transition in transitions.values():
+		var conditions : Dictionary = transition.conditions
+		if conditions.has(trigger_name) and not conditions[trigger_name] is ValueCondition:
+			return true
+	return false
+
+func get_state_from_transition_with_trigger(state_name, trigger_name):
+	var current_transitions : Dictionary = state_machine.transitions[state_name]
+	for transition in current_transitions.values():
+		var conditions : Dictionary = transition.conditions
+		if conditions.has(trigger_name) and not conditions[trigger_name] is ValueCondition:
+			return transition.to
+	return null
+	
 # Convert node path to state path that can be used to query state with StateMachine.get_state.
 # Node path, "root/path/to/state", equals to State path, "path/to/state"
 static func node_path_to_state_path(node_path):
